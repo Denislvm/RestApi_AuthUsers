@@ -1,0 +1,21 @@
+version: '3'
+services:
+    db:
+      image: postgres:latest
+      environment:
+        - POSTGRES_DB=auth_users
+        - POSTGRES_USER=postgres
+        - POSTGRES_PASSWORD=1234
+      ports:
+        - "127.0.0.1:5432:5432"
+    api:
+      build: .
+      entrypoint: ./entrypoint.sh
+      volumes:
+        - ./.database/postgres/data:/var/lib/postgresql/data
+      ports:
+        - "127.0.0.1:8000:8000"
+      env_file:
+        - POSTGRES_PASSWORD=1234
+      depends_on:
+        - db
